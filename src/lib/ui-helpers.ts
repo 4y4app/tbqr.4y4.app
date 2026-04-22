@@ -39,7 +39,7 @@ export async function generateAndOpenQR(data: any, email: string) {
     hiddenContainer.innerHTML = "";
 
     const size = 400; // インデックス、一括共通で400px
-    const margin = 20;
+    const margin = 40;
 
     // 1. QR生成 (一時的に非表示エリアに生成)
     new QRCode(hiddenContainer, {
@@ -82,7 +82,7 @@ export function openResultTab(dataUrl: string, email: string) {
                 body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding: 2em; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height: 80vh; }
                 .card { background: white; padding: 3em; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width:500px; width:100%; }
                 h1 { color: #444; margin: 0 0 0.5em 0; font-size: 1.5em; }
-                img { border: 1px solid #eee; padding: 10px; margin: 1.5em 0; max-width: 100%; }
+                img { border: 1px solid #eee; margin: 1.5em 0; max-width: 100%; }
                 .btn { display: inline-block; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold; background: #007bff; color: white; border: none; cursor: pointer; margin: 0.5em; }
                 .btn:hover { background: #0056b3; }
                 .btn-mail { background: #28a745; }
