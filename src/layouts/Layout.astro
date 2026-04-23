@@ -1,10 +1,13 @@
 ---
+import AdSidebar from "../components/AdSidebar.astro";
+
 interface Props {
 	title: string;
 }
 
 const { title } = Astro.props;
 const description = "Thunderbirdのメールアカウント設定をQRコードで作成し、モバイル版Thunderbirdへ簡単に設定できるWebツールです。IMAP/POP3/SMTPに対応。";
+const showAds = import.meta.env.PUBLIC_SHOW_ADS === "true";
 ---
 
 <!doctype html>
@@ -13,7 +16,7 @@ const description = "Thunderbirdのメールアカウント設定をQRコード�
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-        
+
         <!-- Primary Meta Tags -->
 		<title>{title}</title>
 		<meta name="title" content={title} />
@@ -25,13 +28,13 @@ const description = "Thunderbirdのメールアカウント設定をQRコード�
         <meta property="og:url" content={Astro.url} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        
+
         <!-- Twitter -->
         <meta property="twitter:card" content="summary" />
         <meta property="twitter:url" content={Astro.url} />
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={description} />
-        
+
         <!-- Robots -->
         <meta name="robots" content="index, follow" />
 
@@ -39,9 +42,18 @@ const description = "Thunderbirdのメールアカウント設定をQRコード�
 		<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 	</head>
 	<body>
-		<div class="container">
-			<slot />
-		</div>
+		{showAds ? (
+			<div class="page-with-sidebar">
+				<div class="container">
+					<slot />
+				</div>
+				<AdSidebar />
+			</div>
+		) : (
+			<div class="container">
+				<slot />
+			</div>
+		)}
 	</body>
 </html>
 
@@ -60,6 +72,20 @@ const description = "Thunderbirdのメールアカウント設定をQRコード�
 		min-height: 100vh;
 		margin: 0;
 		box-sizing: border-box;
+	}
+
+	.page-with-sidebar {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 2em;
+		width: 100%;
+		max-width: 960px;
+	}
+
+	.page-with-sidebar .container {
+		flex: 1;
+		min-width: 0;
 	}
 
 	.container {
@@ -118,4 +144,11 @@ const description = "Thunderbirdのメールアカウント設定をQRコード�
         box-sizing: border-box;
         background-color: #fff;
     }
+
+	@media (max-width: 960px) {
+		.page-with-sidebar {
+			flex-direction: column;
+			align-items: center;
+		}
+	}
 </style>

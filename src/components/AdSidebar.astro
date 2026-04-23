@@ -1,0 +1,27 @@
+---
+// サイドバー広告コンポーネント
+// ここに実際の広告コード（Google AdSense など）を貼り付けてください
+---
+
+<aside class="ad-sidebar">
+    <!-- ▼▼▼ 広告コードをここに貼り付け ▼▼▼ -->
+
+    <!-- ▲▲▲ 広告コードここまで ▲▲▲ -->
+</aside>
+
+<style>
+    .ad-sidebar {
+        width: 300px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+        align-items: center;
+    }
+
+    @media (max-width: 960px) {
+        .ad-sidebar {
+            width: 100%;
+        }
+    }
+</style>

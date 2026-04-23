@@ -4,7 +4,10 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "dev:4y4": "astro dev --config astro.config.4y4.mjs",
+    "build:s4ba": "astro build",
+    "build:4y4": "astro build --config astro.config.4y4.mjs",
+    "build": "npm run build:s4ba && npm run build:4y4",
     "preview": "astro preview",
     "astro": "astro"
   },
