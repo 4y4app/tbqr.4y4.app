@@ -1,3 +1,4 @@
-﻿1.mailaddress,1.protcol,1.Incoming,1.user,1.pass,1.outgoing,1.smtpuser,1.smtppass,2.mailaddress,2.protcol,2.Incoming,2.user,2.pass,2.outgoing,2.smtpuser,2.smtppass,3.mailaddress,3.protcol,3.Incoming,3.user,3.pass,3.outgoing,3.smtpuser,3.smtppass
-user01-a@example.com,IMAP,imap.example.com,user01-a,pass111,smtp.example.com,user01-a,pass111,user01-b@example.net,POP3,pop.example.net,user01-b,pass222,smtp.example.net,user01-b,pass222,user01-c@example.org,IMAP,imap.example.org,user01-c,pass333,smtp.example.org,user01-c,pass333
-user02-a@test.jp,IMAP,mail.test.jp,user02-a,key123,mail.test.jp,user02-a,key123,user02-b@sample.co.jp,IMAP,imap.sample.co.jp,user02-b,key456,smtp.sample.co.jp,user02-b,key456,user02-c@demo.com,POP3,pop.demo.com,user02-c,key789,smtp.demo.com,user02-c,key789
+﻿表示名,メールアドレス,プロトコル,受信サーバー,受信ユーザー,受信パスワード,送信サーバー,送信ユーザー,送信パスワード
+test1@test.com,test1@test.com,POP,pop.test.com,test1@test.com,test,smtp.test.com,test1@test.com,test
+test2@test.com,test2@test.com,POP,pop.test.com,test2@test.com,test,smtp.test.com,test2@test.com,test
+test3@test.com,test3@test.com,POP,pop.test.com,test3@test.com,test,smtp.test.com,test3@test.com,test

@@ -4,7 +4,10 @@ import Header from "../components/Header.astro";
 import QRHiddenArea from "../components/QRHiddenArea.astro";
 ---
 
-<Layout title="一括読み込み | Thunderbird QR生成">
+<Layout
+    title="一括読み込み | Thunderbird QR生成"
+    description="CSVファイルから複数のメールアカウント情報を読み込み、Thunderbird設定用QRコードをまとめて生成できます。"
+>
     <Header />
 
     <main class="bulk-container">
@@ -46,8 +49,8 @@ import QRHiddenArea from "../components/QRHiddenArea.astro";
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th>代表メールアドレス</th>
-                        <th>アカウント数</th>
+                        <th>メールアドレス</th>
+                        <th>プロトコル</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -200,7 +203,7 @@ import QRHiddenArea from "../components/QRHiddenArea.astro";
 
 <script>
     import { AppConfig } from "../lib/constants";
-    import { buildMultiThunderbirdData } from "../lib/thunderbird";
+    import { buildThunderbirdData } from "../lib/thunderbird";
     import { generateAndOpenQR } from "../lib/ui-helpers";
 
     declare const QRCode: any;
@@ -276,21 +279,21 @@ import QRHiddenArea from "../components/QRHiddenArea.astro";
         if (countBadge) countBadge.innerText = `${rows.length}件`;
 
         rows.forEach((row, index) => {
-            const accounts = groupAccounts(row);
-            if (accounts.length === 0) return;
+            const account = parseAccountRow(row);
+            if (!account) return;
 
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td>${index + 1}</td>
-                <td>${accounts[0].base.email}</td>
-                <td>${accounts.length} アカウント</td>
+                <td>${account.base.email}</td>
+                <td>${account.base.protocol === AppConfig.PROTOCOL.POP3 ? "POP3" : "IMAP"}</td>
                 <td><button class="btn-qr">QR生成</button></td>
             `;
 
             const btn = tr.querySelector(".btn-qr");
             btn?.addEventListener("click", () => {
-                const data = buildMultiThunderbirdData(accounts);
-                generateAndOpenQR(data, accounts[0].base.email);
+                const data = buildThunderbirdData(account);
+                generateAndOpenQR(data, account.base.email);
             });
 
             tbody.appendChild(tr);
@@ -310,54 +313,48 @@ import QRHiddenArea from "../components/QRHiddenArea.astro";
             .filter((row) => row.some((v) => v !== ""));
     }
 
-    function groupAccounts(row: string[]) {
-        const accounts: any[] = [];
-        // 1つの行に最大10アカウント、各アカウント9項目
+    function parseAccountRow(row: string[]) {
         // 0:表示名, 1:メール, 2:プロトコル, 3:受信鯖, 4:受信ユーザ, 5:受信パス, 6:送信鯖, 7:送信ユーザ, 8:送信パス
-        for (let i = 0; i < 10; i++) {
-            const offset = i * 9;
-            const displayName = row[offset];
-            const email = row[offset + 1];
-            if (!email) continue;
+        const displayName = row[0];
+        const email = row[1];
+        if (!email) return null;
 
-            const protocolName = (row[offset + 2] || "IMAP").toUpperCase();
-            const protocol =
-                protocolName === "POP3"
-                    ? AppConfig.PROTOCOL.POP3
-                    : AppConfig.PROTOCOL.IMAP;
+        const protocolName = (row[2] || "IMAP").toUpperCase();
+        const protocol =
+            protocolName === "POP3" || protocolName === "POP"
+                ? AppConfig.PROTOCOL.POP3
+                : AppConfig.PROTOCOL.IMAP;
 
-            const host = row[offset + 3];
-            const user = row[offset + 4] || email;
-            const pass = row[offset + 5];
-            const smtpHost = row[offset + 6] || host;
-            const smtpUser = row[offset + 7] || user;
-            const smtpPass = row[offset + 8] || pass;
+        const host = row[3];
+        const user = row[4] || email;
+        const pass = row[5];
+        const smtpHost = row[6] || host;
+        const smtpUser = row[7] || user;
+        const smtpPass = row[8] || pass;
 
-            accounts.push({
-                base: {
-                    displayName,
-                    email,
-                    user,
-                    pass,
-                    host,
-                    port:
-                        protocol === AppConfig.PROTOCOL.IMAP
-                            ? AppConfig.PORTS.IMAP.PLAIN
-                            : AppConfig.PORTS.POP3.PLAIN,
-                    protocol,
-                    security: AppConfig.SECURITY.NONE,
-                    auth: 1,
-                },
-                smtp: {
-                    host: smtpHost || host,
-                    security: AppConfig.SECURITY.NONE,
-                    port: AppConfig.PORTS.SMTP.PLAIN,
-                    user: smtpUser,
-                    pass: smtpPass,
-                },
-            });
-        }
-        return accounts;
+        return {
+            base: {
+                displayName,
+                email,
+                user,
+                pass,
+                host,
+                port:
+                    protocol === AppConfig.PROTOCOL.IMAP
+                        ? AppConfig.PORTS.IMAP.PLAIN
+                        : AppConfig.PORTS.POP3.PLAIN,
+                protocol,
+                security: AppConfig.SECURITY.NONE,
+                auth: 1,
+            },
+            smtp: {
+                host: smtpHost || host,
+                security: AppConfig.SECURITY.NONE,
+                port: AppConfig.PORTS.SMTP.PLAIN,
+                user: smtpUser,
+                pass: smtpPass,
+            },
+        };
     }
 
     function showLoading(show: boolean) {

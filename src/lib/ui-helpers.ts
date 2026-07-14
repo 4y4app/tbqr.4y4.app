@@ -123,7 +123,7 @@ export function openResultTab(dataUrl: string, email: string) {
             <main>
                 <div class="card">
                     <h1>設定用QR (${email})</h1>
-                    <img id="qr-image" src="${dataUrl}">
+                    <img id="qr-image" src="${dataUrl}" alt="Thunderbird設定用QRコード (${email})">
                     <div style="margin-top: 1em;">
                         <button id="copy-mail-btn" class="btn btn-mail">メール通知用コピー & メール作成</button>
                         <a href="${dataUrl}" download="${fileName}" class="btn">画像を保存 (${fileName})</a>

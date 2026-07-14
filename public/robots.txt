@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tbqr.4y4.app/sitemap-index.xml
