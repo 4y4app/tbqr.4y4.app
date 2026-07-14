@@ -5,9 +5,6 @@
 <!-- 基本アカウント情報 -->
 <fieldset>
     <legend>アカウント基本情報</legend>
-    <label>差出人名（表示名）</label>
-    <input type="text" id="displayname" placeholder="例: 山田 太郎" />
-
     <label>メールアドレス</label>
     <input
         type="email"
@@ -16,16 +13,8 @@
         required
     />
 
-    <label>受信ユーザー名</label>
-    <input
-        type="text"
-        id="username"
-        placeholder="例: user@example.com"
-        required
-    />
-
-    <label>受信パスワード</label>
-    <input type="password" id="password" placeholder="パスワード" />
+    <label>差出人名（表示名）</label>
+    <input type="text" id="displayname" placeholder="例: 山田 太郎" />
 </fieldset>
 
 <!-- 受信サーバー設定 -->
@@ -55,4 +44,15 @@
         <option value="1" selected>通常のパスワード認証</option>
         <option value="2">暗号化されたパスワード認証</option>
     </select>
+
+    <label>受信ユーザー名</label>
+    <input
+        type="text"
+        id="username"
+        placeholder="例: user@example.com"
+        required
+    />
+
+    <label>受信パスワード</label>
+    <input type="password" id="password" placeholder="パスワード" />
 </fieldset>

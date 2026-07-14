@@ -9,6 +9,13 @@ import QRHiddenArea from "../components/QRHiddenArea.astro";
 <Layout title="Thunderbird設定QR生成">
     <Header />
 
+    <h1 class="font-heading text-2xl font-black italic tracking-tighter text-slate-900 text-center">
+        Thunderbird QR生成
+    </h1>
+    <p class="mt-2 mb-8 text-center text-sm text-slate-500">
+        設定情報を入力し、ボタンを押すと<br />別タブで設定用QRコードが表示されます。
+    </p>
+
     <form id="mail-config-form">
         <IncomingForm />
         <SMTPForm />
@@ -25,20 +32,20 @@ import QRHiddenArea from "../components/QRHiddenArea.astro";
         color: white;
         border: none;
         cursor: pointer;
-        padding: 15px 20px;
-        font-size: 1.1em;
-        font-weight: bold;
-        border-radius: 4px;
+        padding: 1em 2em;
+        font-size: 1.05em;
+        font-weight: 700;
+        border-radius: 1rem;
         width: 100%;
-        background-color: #007bff;
-        transition: background-color 0.2s;
+        background-color: var(--color-brand-600);
+        transition: background-color 0.2s, box-shadow 0.2s;
         margin-top: 1em;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 20px -8px var(--color-brand-200);
     }
 
     .button-generate:hover {
-        background-color: #0056b3;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        background-color: var(--color-brand-700);
+        box-shadow: 0 14px 24px -8px var(--color-brand-200);
     }
 </style>
 <script>
@@ -96,6 +103,48 @@ import QRHiddenArea from "../components/QRHiddenArea.astro";
 
     // Initialize Sync Logic
     initSMTPSync();
+    initAutoFillFromEmail();
+
+    /**
+     * メールアドレス入力時に、差出人名・受信ユーザー名を自動補完する。
+     * ユーザーが手動で書き換えた後は、その値を上書きしない。
+     */
+    function initAutoFillFromEmail() {
+        const emailInput = document.getElementById("email") as HTMLInputElement;
+        const displayNameInput = document.getElementById(
+            "displayname",
+        ) as HTMLInputElement;
+        const usernameInput = document.getElementById(
+            "username",
+        ) as HTMLInputElement;
+
+        if (!emailInput || !displayNameInput || !usernameInput) return;
+
+        let lastAutoDisplayName = "";
+        let lastAutoUsername = "";
+
+        emailInput.addEventListener("input", () => {
+            const email = emailInput.value;
+
+            if (
+                displayNameInput.value === "" ||
+                displayNameInput.value === lastAutoDisplayName
+            ) {
+                displayNameInput.value = email;
+                lastAutoDisplayName = email;
+            }
+
+            if (
+                usernameInput.value === "" ||
+                usernameInput.value === lastAutoUsername
+            ) {
+                usernameInput.value = email;
+                lastAutoUsername = email;
+                // 受信サーバー設定側のSMTP同期ロジックにも反映させる
+                usernameInput.dispatchEvent(new Event("input"));
+            }
+        });
+    }
 
     function initSMTPSync() {
         if (!sameAsIncomingCb || !smtpWrapper) return;

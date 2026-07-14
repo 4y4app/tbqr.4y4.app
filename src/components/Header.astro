@@ -1,62 +1,115 @@
 ---
 const pathname = new URL(Astro.request.url).pathname;
+
+const links = [
+	{ href: "/", label: "作成フォーム" },
+	{ href: "/bulk", label: "一括読み込み" },
+	{ href: "/guide", label: "仕様・使い方解説" },
+];
 ---
 
-<h1>Thunderbird QR生成</h1>
+<header class="glass fixed inset-x-0 top-0 z-50 border-b border-white/20">
+	<div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+		<a href="/" class="font-heading text-lg font-black italic tracking-tighter text-slate-900">
+			Thunderbird<span class="text-brand-600"> QR</span>
+		</a>
 
-<nav class="nav-links">
-    <a href="/" class={pathname === "/" ? "active" : ""}>作成フォーム</a>
-    <a href="/bulk" class={pathname === "/bulk" ? "active" : ""}>一括読み込み</a
-    >
-    <a href="/guide" class={pathname === "/guide" ? "active" : ""}
-        >仕様・使い方解説</a
-    >
-</nav>
+		<nav class="hidden items-center gap-1 sm:flex">
+			{links.map((link) => (
+				<a
+					href={link.href}
+					class:list={[
+						"rounded-xl px-4 py-2 text-sm font-medium transition-colors",
+						pathname === link.href
+							? "bg-brand-50 text-brand-600"
+							: "text-slate-500 hover:bg-brand-50 hover:text-brand-600",
+					]}
+				>
+					{link.label}
+				</a>
+			))}
+		</nav>
 
-<p class="description">
-    設定情報を入力し、ボタンを押すと<br />別タブで設定用QRコードが表示されます。
-</p>
+		<button
+			id="menu-trigger"
+			type="button"
+			class="rounded-xl p-2 text-slate-500 hover:bg-brand-50 hover:text-brand-600 sm:hidden"
+			aria-label="メニューを開く"
+			aria-expanded="false"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+			</svg>
+		</button>
+	</div>
+</header>
+
+<div id="mobile-menu" class="invisible fixed inset-0 z-[100] bg-white/90 opacity-0 backdrop-blur-xl transition-all duration-500">
+	<button
+		id="menu-close"
+		type="button"
+		class="absolute top-4 right-5 rounded-xl bg-slate-50 p-3 text-slate-500 hover:text-brand-600"
+		aria-label="メニューを閉じる"
+	>
+		<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+		</svg>
+	</button>
+
+	<nav class="flex h-full flex-col items-center justify-center gap-8">
+		{links.map((link, i) => (
+			<a
+				href={link.href}
+				class:list={[
+					"mobile-link translate-y-3 text-2xl font-black uppercase tracking-widest opacity-0 transition-all duration-500",
+					pathname === link.href ? "text-brand-600" : "text-slate-500 hover:text-brand-600",
+				]}
+				style={`transition-delay: ${i * 60}ms`}
+			>
+				{link.label}
+			</a>
+		))}
+	</nav>
+</div>
 
 <style>
-    h1 {
-        text-align: center;
-        color: #444;
-        margin-bottom: 0.5em;
-    }
+	.glass {
+		background: rgba(255, 255, 255, 0.7);
+		backdrop-filter: blur(24px);
+	}
 
-    .nav-links {
-        display: flex;
-        justify-content: center;
-        gap: 1em;
-        margin-bottom: 1.5em;
-    }
+	#mobile-menu.open {
+		visibility: visible;
+		opacity: 1;
+	}
 
-    .nav-links a {
-        text-decoration: none;
-        color: #666;
-        padding: 5px 10px;
-        border-radius: 4px;
-        transition:
-            background-color 0.2s,
-            color 0.2s;
-        font-weight: 500;
-    }
-
-    .nav-links a:hover {
-        background-color: #e9ecef;
-        color: #333;
-    }
-
-    .nav-links a.active {
-        background-color: #e7f1ff;
-        color: #007bff;
-        font-weight: bold;
-    }
-
-    .description {
-        text-align: center;
-        font-size: 0.9em;
-        color: #666;
-        margin-bottom: 2em;
-    }
+	#mobile-menu.open .mobile-link {
+		transform: translateY(0);
+		opacity: 1;
+	}
 </style>
+
+<script>
+	const trigger = document.getElementById("menu-trigger");
+	const closeBtn = document.getElementById("menu-close");
+	const menu = document.getElementById("mobile-menu");
+
+	function openMenu() {
+		menu?.classList.add("open");
+		trigger?.setAttribute("aria-expanded", "true");
+		document.body.style.overflow = "hidden";
+	}
+
+	function closeMenu() {
+		menu?.classList.remove("open");
+		trigger?.setAttribute("aria-expanded", "false");
+		document.body.style.overflow = "";
+	}
+
+	trigger?.addEventListener("click", openMenu);
+	closeBtn?.addEventListener("click", closeMenu);
+	menu?.addEventListener("click", (e) => {
+		if (e.target === menu) closeMenu();
+	});
+	menu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeMenu));
+</script>

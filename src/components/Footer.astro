@@ -1,0 +1,22 @@
+---
+const year = new Date().getFullYear();
+
+const links = [
+	{ href: "/", label: "作成フォーム" },
+	{ href: "/bulk", label: "一括読み込み" },
+	{ href: "/guide", label: "仕様・使い方解説" },
+];
+---
+
+<footer class="mt-auto border-t border-slate-200/60 py-8 text-center">
+	<nav class="mb-3 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+		{links.map((link) => (
+			<a href={link.href} class="text-xs font-medium text-slate-500 hover:text-brand-600">
+				{link.label}
+			</a>
+		))}
+	</nav>
+	<p class="text-xs text-slate-400">
+		&copy; {year} <a href="https://4y4.app" class="hover:text-brand-600">4y4.app</a>
+	</p>
+</footer>

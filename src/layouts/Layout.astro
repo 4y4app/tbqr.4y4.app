@@ -1,5 +1,7 @@
 ---
 import AdSidebar from "../components/AdSidebar.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
 
 interface Props {
 	title: string;
@@ -7,7 +9,6 @@ interface Props {
 
 const { title } = Astro.props;
 const description = "Thunderbirdのメールアカウント設定をQRコードで作成し、モバイル版Thunderbirdへ簡単に設定できるWebツールです。IMAP/POP3/SMTPに対応。";
-const showAds = import.meta.env.PUBLIC_SHOW_ADS === "true";
 ---
 
 <!doctype html>
@@ -38,117 +39,89 @@ const showAds = import.meta.env.PUBLIC_SHOW_ADS === "true";
         <!-- Robots -->
         <meta name="robots" content="index, follow" />
 
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
+
 		<!-- QRコード生成ライブラリ (CDN) -->
 		<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 	</head>
-	<body>
-		{showAds ? (
-			<div class="page-with-sidebar">
-				<div class="container">
-					<slot />
-				</div>
-				<AdSidebar />
-			</div>
-		) : (
-			<div class="container">
+	<body class="flex min-h-screen flex-col bg-slate-50 text-slate-900 antialiased">
+		<div class="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-6 pt-28 pb-16">
+			<div class="rounded-[2rem] border border-slate-200/60 bg-white p-8 shadow-sm">
 				<slot />
 			</div>
-		)}
+			<AdSidebar />
+		</div>
+		<Footer />
 	</body>
 </html>
 
 <style is:global>
-	/* =========================================
-	   Base Styles (Global)
-	   ========================================= */
-	body {
-		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-		background-color: #f4f4f9;
-		color: #333;
+	/* フォーム共通スタイル */
+	form {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		padding: 2em;
-		min-height: 100vh;
+		gap: 1.5em;
+		text-align: left;
+	}
+
+	fieldset {
+		border: 1px solid var(--color-slate-200);
+		border-radius: 1rem;
+		padding: 1.5em;
 		margin: 0;
+		background-color: var(--color-slate-50);
+	}
+
+	legend {
+		font-weight: 700;
+		color: var(--color-brand-700);
+		padding: 0 0.5em;
+		background-color: #fff;
+		border: 1px solid var(--color-slate-200);
+		border-radius: 0.5rem;
+		font-size: 0.9em;
+	}
+
+	label {
+		display: block;
+		margin-bottom: 0.5em;
+		font-weight: 500;
+		color: var(--color-slate-500);
+		font-size: 0.9em;
+		margin-top: 1em;
+	}
+	label:first-of-type {
+		margin-top: 0;
+	}
+
+	input[type=text],
+	input[type=email],
+	input[type=password],
+	select {
+		width: 100%;
+		padding: 10px 12px;
+		border: 1px solid var(--color-slate-200);
+		border-radius: 0.75rem;
+		font-size: 1em;
+		font-family: var(--font-sans);
 		box-sizing: border-box;
+		background-color: #fff;
+		color: var(--color-slate-900);
+		transition: border-color 0.2s, box-shadow 0.2s;
 	}
 
-	.page-with-sidebar {
-		display: flex;
-		flex-direction: row;
-		align-items: flex-start;
-		gap: 2em;
-		width: 100%;
-		max-width: 960px;
-	}
-
-	.page-with-sidebar .container {
-		flex: 1;
-		min-width: 0;
-	}
-
-	.container {
-		background-color: #ffffff;
-		padding: 2em;
-		border-radius: 8px;
-		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-		max-width: 600px;
-		width: 100%;
-	}
-
-    /* フォーム共通スタイル */
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5em;
-        text-align: left;
-    }
-
-    fieldset {
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 1.5em;
-        margin: 0;
-        background-color: #fafafa;
-    }
-
-    legend {
-        font-weight: bold;
-        color: #0056b3;
-        padding: 0 0.5em;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 0.5em;
-        font-weight: 500;
-        margin-top: 1em;
-    }
-    label:first-of-type {
-        margin-top: 0;
-    }
-
-    input[type=text],
-    input[type=email],
-    input[type=password],
-    select {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 1em;
-        box-sizing: border-box;
-        background-color: #fff;
-    }
-
-	@media (max-width: 960px) {
-		.page-with-sidebar {
-			flex-direction: column;
-			align-items: center;
-		}
+	input[type=text]:focus,
+	input[type=email]:focus,
+	input[type=password]:focus,
+	select:focus {
+		outline: none;
+		border-color: var(--color-brand-500);
+		box-shadow: 0 0 0 3px var(--color-brand-100);
 	}
 </style>
