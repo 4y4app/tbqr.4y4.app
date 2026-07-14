@@ -4,23 +4,26 @@ import Header from "../components/Header.astro";
 ---
 
 <Layout
-    title="解説と仕様 | Thunderbird QR生成"
-    description="Thunderbird QRの仕組み、対応プロトコル、CSV一括読み込みの形式、セキュリティ上の注意点などの使い方を解説します。"
+    title="使い方 | Thunderbird QR生成"
+    description="Thunderbird QRの使い方、CSV一括読み込みの形式、セキュリティ上の注意点を解説します。JSON構造などの技術仕様は仕様ページをご覧ください。"
 >
     <Header />
 
-    <div class="guide-container">
-        <header>
-            <h1>QRコードの仕様と使い方</h1>
-            <a href="/" class="back-link">← トップページに戻る</a>
-        </header>
+    <h1 class="font-heading text-2xl font-black italic tracking-tighter text-slate-900 text-center">
+        使い方
+    </h1>
 
+    <div class="guide-container">
         <section class="guide-section">
             <h2>📱 アプリでの使い方</h2>
             <p>
                 生成されたQRコードは、Thunderbird Android版の設定移行機能で使用します。
             </p>
             <ol class="step-list">
+                <li>
+                    <strong>ホスティング事業者から指定された設定値</strong
+                    >を入れてください。QRが作られます。
+                </li>
                 <li>Android版 <strong>Thunderbird</strong> を起動します。</li>
                 <li>
                     「設定をインポート」または「アカウントの追加」を選択します。
@@ -33,48 +36,6 @@ import Header from "../components/Header.astro";
                     パスワード等の情報が自動入力されていることを確認し、完了します。
                 </li>
             </ol>
-        </section>
-
-        <section class="guide-section">
-            <h2>🔧 技術仕様 (JSON構造)</h2>
-            <p>
-                このQRコードには、Thunderbirdが解釈可能な以下の配列形式（JSON）が含まれています。
-            </p>
-
-            <div class="code-block">
-                <pre><code>[
-  1,           // バージョン
-  [1, 1],      // フラグ
-  [            // 受信設定 (Incoming)
-    1,         // プロトコル (0:IMAP, 1:POP3)
-    "host",    // サーバー名
-    110,       // ポート
-    0,         // セキュリティ (0:None, 1:STARTTLS, 2:SSL)
-    1,         // 認証方式 (1:平文, 2:暗号化PW)
-    "user",    // ユーザー名
-    "email",   // メールアドレス
-    "pass"     // パスワード
-  ],
-  [[           // 送信設定 (Outgoing)
-    [
-      0,       // 固定値
-      "host",  // SMTPサーバー名
-      587,     // SMTPポート
-      1,       // SMTPセキュリティ
-      1,       // SMTP認証方式
-      "user",  // SMTPユーザー名
-      "pass"   // SMTPパスワード
-    ],
-    [
-      "email_from",  // 差出人メールアドレス
-      "email_name"  // 差出人名
-    ] 
-  ]]
-]</code></pre>
-            </div>
-            <p class="note">
-                ※配列の順番とデータ型が厳密に決められており、キー名（"host"など）は持ちません。
-            </p>
         </section>
 
         <section class="guide-section">
@@ -92,6 +53,13 @@ import Header from "../components/Header.astro";
             </ul>
         </section>
 
+        <section class="guide-section">
+            <h2>🔧 技術仕様</h2>
+            <p>
+                QRコードに含まれるJSON構造など、詳細な技術仕様は<a href="/spec">技術仕様ページ</a>をご覧ください。
+            </p>
+        </section>
+
         <section>
             <h2>📝 関連情報</h2>
             <p>
@@ -99,14 +67,14 @@ import Header from "../components/Header.astro";
                 <a href="https://www.thunderbird.net/ja/mobile/">https://www.thunderbird.net/ja/mobile/</a>
             </p>
             <p>
-                Thunderbird Android版のQRコード設定移行機能に関する公式ドキュメント: <br>                
+                Thunderbird Android版のQRコード設定移行機能に関する公式ドキュメント: <br>
                 <a href="https://support.mozilla.org/ja/kb/thunderbird-android-import">https://support.mozilla.org/ja/kb/thunderbird-android-import</a>
             </p>
             <p>
-                Thunderbird Android版について<br>                
+                Thunderbird Android版について<br>
                 <a href="https://support.mozilla.org/ja/kb/thunderbird-android-8-faq">https://support.mozilla.org/ja/kb/thunderbird-android-8-faq</a>
             </p>
-            
+
         </section>
     </div>
 </Layout>
@@ -115,33 +83,7 @@ import Header from "../components/Header.astro";
     .guide-container {
         text-align: left;
         line-height: 1.6;
-    }
-
-    header {
-        text-align: center;
-        margin-bottom: 2em;
-        padding-bottom: 1em;
-        border-bottom: 1px solid var(--color-slate-200);
-    }
-
-    h1 {
-        font-family: var(--font-heading);
-        font-weight: 800;
-        font-style: italic;
-        letter-spacing: -0.02em;
-        color: var(--color-slate-900);
-        margin-bottom: 0.5em;
-    }
-
-    .back-link {
-        display: inline-block;
-        color: var(--color-brand-600);
-        text-decoration: none;
-        font-weight: 700;
-    }
-    .back-link:hover {
-        color: var(--color-brand-700);
-        text-decoration: underline;
+        margin-top: 2em;
     }
 
     .guide-section {
@@ -166,26 +108,6 @@ import Header from "../components/Header.astro";
     }
     .step-list li {
         margin-bottom: 0.5em;
-    }
-
-    .code-block {
-        background: var(--color-slate-950);
-        color: #f8f8f2;
-        padding: 1.5em;
-        border-radius: 1rem;
-        overflow-x: auto;
-        font-family: var(--font-mono);
-        font-size: 0.9em;
-        margin: 1em 0;
-    }
-
-    .note {
-        font-size: 0.9em;
-        color: #92400e;
-        background-color: #fffbeb;
-        padding: 0.5em 1em;
-        border-radius: 0.75rem;
-        border: 1px solid #fde68a;
     }
 
     .security-list li {

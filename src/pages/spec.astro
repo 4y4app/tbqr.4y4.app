@@ -1,0 +1,113 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+---
+
+<Layout
+    title="技術仕様 | Thunderbird QR生成"
+    description="Thunderbird QRが生成するQRコードに含まれるJSON配列構造の技術仕様を解説します。使い方については使い方ページをご覧ください。"
+>
+    <Header />
+
+    <h1 class="font-heading text-2xl font-black italic tracking-tighter text-slate-900 text-center">
+        技術仕様
+    </h1>
+
+    <div class="guide-container">
+        <section class="guide-section">
+            <h2>🔧 技術仕様 (JSON構造)</h2>
+            <p>
+                このQRコードには、Thunderbirdが解釈可能な以下の配列形式（JSON）が含まれています。
+            </p>
+
+            <div class="code-block">
+                <pre><code>[
+  1,           // バージョン
+  [1, 1],      // フラグ
+  [            // 受信設定 (Incoming)
+    1,         // プロトコル (0:IMAP, 1:POP3)
+    "host",    // サーバー名
+    110,       // ポート
+    0,         // セキュリティ (0:None, 1:STARTTLS, 2:SSL)
+    1,         // 認証方式 (1:平文, 2:暗号化PW)
+    "user",    // ユーザー名
+    "email",   // メールアドレス
+    "pass"     // パスワード
+  ],
+  [[           // 送信設定 (Outgoing)
+    [
+      0,       // 固定値
+      "host",  // SMTPサーバー名
+      587,     // SMTPポート
+      1,       // SMTPセキュリティ
+      1,       // SMTP認証方式
+      "user",  // SMTPユーザー名
+      "pass"   // SMTPパスワード
+    ],
+    [
+      "email_from",  // 差出人メールアドレス
+      "email_name"  // 差出人名
+    ]
+  ]]
+]</code></pre>
+            </div>
+            <p class="note">
+                ※配列の順番とデータ型が厳密に決められており、キー名（"host"など）は持ちません。
+            </p>
+        </section>
+
+        <section>
+            <h2>📝 関連情報</h2>
+            <p>
+                Thunderbird公式サイト: <br>
+                <a href="https://www.thunderbird.net/ja/mobile/">https://www.thunderbird.net/ja/mobile/</a>
+            </p>
+            <p>
+                Thunderbird Android版のQRコード設定移行機能に関する公式ドキュメント: <br>
+                <a href="https://support.mozilla.org/ja/kb/thunderbird-android-import">https://support.mozilla.org/ja/kb/thunderbird-android-import</a>
+            </p>
+        </section>
+    </div>
+</Layout>
+
+<style>
+    .guide-container {
+        text-align: left;
+        line-height: 1.6;
+        margin-top: 2em;
+    }
+
+    .guide-section {
+        margin-bottom: 3em;
+    }
+
+    h2 {
+        font-family: var(--font-heading);
+        color: var(--color-brand-700);
+        font-size: 1.3em;
+        font-weight: 700;
+        border-left: 5px solid var(--color-brand-600);
+        padding-left: 10px;
+        margin-bottom: 1em;
+    }
+
+    .code-block {
+        background: var(--color-slate-950);
+        color: #f8f8f2;
+        padding: 1.5em;
+        border-radius: 1rem;
+        overflow-x: auto;
+        font-family: var(--font-mono);
+        font-size: 0.9em;
+        margin: 1em 0;
+    }
+
+    .note {
+        font-size: 0.9em;
+        color: #92400e;
+        background-color: #fffbeb;
+        padding: 0.5em 1em;
+        border-radius: 0.75rem;
+        border: 1px solid #fde68a;
+    }
+</style>

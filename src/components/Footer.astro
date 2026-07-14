@@ -4,13 +4,17 @@ const year = new Date().getFullYear();
 const links = [
 	{ href: "/", label: "作成フォーム" },
 	{ href: "/bulk", label: "一括読み込み" },
-	{ href: "/guide", label: "仕様・使い方解説" },
+	{ href: "/guide", label: "使い方" },
+	{ href: "/spec", label: "技術仕様" },
 ];
 ---
 
 <footer class="mt-auto border-t border-slate-200/60 py-8 text-center">
 	<p class="font-heading mb-1 text-lg font-black italic tracking-tighter text-slate-900">
 		Thunderbird<span class="text-brand-600"> QR</span>
+	</p>
+	<p class="mx-auto mb-3 max-w-md text-xs text-slate-400 text-balance">
+		This tool is useful for hosting providers and for setting up or deploying company-issued smartphones.
 	</p>
 	<nav class="mb-3 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
 		{links.map((link) => (
